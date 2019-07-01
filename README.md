@@ -1,1 +1,1 @@
-# AndroidJarForUnity
+# Android and Unity interaction
