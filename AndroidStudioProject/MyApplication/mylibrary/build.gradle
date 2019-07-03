@@ -32,3 +32,95 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
 }
+
+//测试1
+//Copy类型
+/*task makeJar(type: Copy) {
+    //删除存在的
+    delete 'build/libs/mysdk.jar'
+    //设置拷贝的文件
+    from('build/intermediates/bundles/debug/')
+    //打进jar包后的文件目录
+    into('build/libs/')
+    //将classes.jar放入build/libs/目录下
+    //include ,exclude参数来设置过滤
+    //（我们只关心classes.jar这个文件）
+    include('classes.jar')
+    //重命名
+    rename ('classes.jar', 'mysdk.jar')
+}*/
+
+/*makeJar.dependsOn(build)*/
+//在终端执行生成JAR包
+// gradlew makeJar
+
+
+
+
+
+//测试2
+/*task clearjar(type: Delete) {
+    delete 'build/UnityLibs/classes.jar'
+    delete 'build/UnityLibs/mysdk.jar'
+    //delete 'build/intermediates/bundles/debug/classes.jar'
+}
+task buildjar(type: Jar,dependsOn: "build") {
+    baseName 'classes'
+    from('build/intermediates/bundles/debug/')
+    into('')
+    //exclude('android', 'com/netmarble/china/demo', 'com/netmarble/china/sdk/baselib','com/netmarble/china/game/demo')//去重
+    exclude('com/example/mylibrary/BuildConfig.class') //"com/example/mylibrary/BuildConfig.class"
+    exclude('com/example/mylibrary/Test.class')
+    exclude{it.name.startsWith('BuildConfig')}
+    exclude("**//*BuildConfig.class")
+    //exclude{ it.name.startsWith('R$') }
+}
+task makeJar(type: Copy) {
+   *//* from('build/libs/mysdk.jar')
+    into('../../NetmarbleSDK_Tools_SamDefense/sdk/yingyongbao/libs/')*//*
+    from('build/intermediates/bundles/debug/classes.jar')
+    //打进jar包后的文件目录
+    into('build/UnityLibs/')
+    //将classes.jar放入build/libs/目录下
+    //include ,exclude参数来设置过滤
+    //（我们只关心classes.jar这个文件）
+    include('classes.jar')
+    //重命名
+    rename ('classes.jar', 'mysdk.jar')
+}
+makeJar.dependsOn(clearjar, buildjar, build)
+//在终端执行生成JAR包
+// gradlew makeJar*/
+
+
+
+
+
+
+
+//测试3
+
+// 删除已存在的 Jar 包
+task deleteOldJar(type: Delete) {
+    delete 'build/UnityLibs/channel.jar'
+    delete 'build/libs/channel.jar'
+    delete 'build/libs/classses.jar'
+}
+
+// 创建 Jar 包
+task makeJar(type: org.gradle.api.tasks.bundling.Jar) {
+    // 指定生成的jar名
+    baseName 'channel'//自定义名称
+    // 指定 cn/soulapp/android/lib 包名目录
+    from('build/intermediates/classes/debug/com/example/mylibrary/')
+    // jar包的目录结构(文件处于cn/soulapp/android/lib目录下)
+    // 生成的jar包没有包名
+    into('build/UnityLibs/')
+    //去掉不需要打包的目录和文件
+    exclude('BuildConfig.class', 'R.class')
+    //去掉R$开头的文件
+    exclude { it.name.startsWith('R$'); }
+}
+makeJar.dependsOn(deleteOldJar, build)
+//在终端执行生成JAR包
+// gradlew makeJar
